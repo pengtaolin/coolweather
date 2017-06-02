@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<litepal>
+    <!--数据库名称-->
+    <dbname value="CoolWeather"/>
+    <!--数据库版本-->
+    <version value="1"/>
+    <!--映射模型-->
+    <list>
+        <mapping class="com.lin.coolweather.db.City"/>
+        <mapping class="com.lin.coolweather.db.Province"/>
+        <mapping class="com.lin.coolweather.db.County"/>
+    </list>
+</litepal>
