@@ -1,6 +1,7 @@
 package com.lin.coolweather;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -30,7 +31,6 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-import static com.lin.coolweather.util.Utility.handleProvinceResponse;
 
 
 /**
@@ -138,6 +138,17 @@ public class ChooseAreaFragment extends Fragment {
                     selectCity = cityList.get(position);
                     //获得所有的县乡
                     queryCounties();
+                } else if (currentLevel==LEVEL_COUNTY) { //县乡
+                    //获得天气城市号
+                    String weatherId = countyList.get(position).getWeatherId();
+                    //获得intent对象
+                    Intent intent = new Intent(getActivity(), WeatherActivity.class);
+                    //添加数据
+                    intent.putExtra("weather_id", weatherId);
+                    //发送intent
+                    startActivity(intent);
+                    //活动结束
+                    getActivity().finish();
                 }
             }
         });
@@ -242,7 +253,7 @@ public class ChooseAreaFragment extends Fragment {
         //根据CityID查询county数据库
         countyList = DataSupport.where("cityid = ?", String.valueOf(selectCity.getId())).find(County.class);
         //结果不为空,数据库中有数据
-        if (cityList.size() > 0) {
+        if (countyList.size() > 0) {
             //数据列表清空
             dataList.clear();
             //显示的数据列表重新赋值
