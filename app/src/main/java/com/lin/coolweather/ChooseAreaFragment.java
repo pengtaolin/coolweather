@@ -3,7 +3,6 @@ package com.lin.coolweather;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -141,14 +140,26 @@ public class ChooseAreaFragment extends Fragment {
                 } else if (currentLevel==LEVEL_COUNTY) { //县乡
                     //获得天气城市号
                     String weatherId = countyList.get(position).getWeatherId();
-                    //获得intent对象
-                    Intent intent = new Intent(getActivity(), WeatherActivity.class);
-                    //添加数据
-                    intent.putExtra("weather_id", weatherId);
-                    //发送intent
-                    startActivity(intent);
-                    //活动结束
-                    getActivity().finish();
+                    //当前界面是主界面
+                    if (getActivity() instanceof MainActivity) {
+                        //获得intent对象
+                        Intent intent = new Intent(getActivity(), WeatherActivity.class);
+                        //添加数据
+                        intent.putExtra("weather_id", weatherId);
+                        //发送intent
+                        startActivity(intent);
+                        //活动结束
+                        getActivity().finish();
+                    } else if (getActivity() instanceof WeatherActivity) {  //当前界面是天气界面
+                        WeatherActivity weatherActivity = (WeatherActivity)getActivity();
+                        //关闭侧滑界面
+                        weatherActivity.drawerLayout.closeDrawers();
+                        //进度条显示
+                        weatherActivity.swipeRefreshLayout.setRefreshing(true);
+                        //请求数据
+                        weatherActivity.requestWeather(weatherId);
+                    }
+
                 }
             }
         });
